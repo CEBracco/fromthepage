@@ -52,7 +52,7 @@ class User < ActiveRecord::Base
 
   def all_owner_collections
     query = Collection.where("owner_user_id = ? or collections.id in (?)", self.id, self.owned_collections.ids)
-    Collection.where(query.where_values.inject(:or)).uniq.order(:title)
+    Collection.where(query.where_values.inject(:or)).uniq#.order(:title)
   end
 
 

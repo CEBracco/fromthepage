@@ -62,16 +62,16 @@ class DashboardController < ApplicationController
   #Collaborator Dashboard - watchlist
   def watchlist
     works = Work.joins(:deeds).where(deeds: {user_id: current_user.id}).distinct
-    collections = Collection.joins(:deeds).where(deeds: {user_id: current_user.id}).distinct.order_by_recent_activity.limit(5)
-    document_sets = DocumentSet.joins(works: :deeds).where(works: {id: works.ids}).order('deeds.created_at DESC').distinct.limit(5)
+    collections = Collection.joins(:deeds).where(deeds: {user_id: current_user.id}).distinct.limit(5)
+    document_sets = DocumentSet.joins(works: :deeds).where(works: {id: works.ids}).distinct.limit(5)
     @collections = (collections + document_sets).sort{|a,b| a.title <=> b.title }.take(5)
     @page = recent_work
   end
 
   #Collaborator Dashboard - user with no activity watchlist
   def recent_work
-    recent_deed_ids = Deed.joins(:collection, :work).merge(Collection.unrestricted).merge(Work.unrestricted)
-                  .where("work_id is not null").order('created_at desc').distinct.limit(5).pluck(:work_id)
+    recent_deeds = Deed.joins(:collection, :work).merge(Collection.unrestricted).merge(Work.unrestricted).where.not(work_id: nil).distinct.limit(5)
+    recent_deed_ids = recent_deeds.map {|deed| deed.work_id}
     @works = Work.joins(:pages).where(id: recent_deed_ids).where(pages: {status: nil})
 
 #find the first blank page in the most recently accessed work (as long as the works list isn't blank)

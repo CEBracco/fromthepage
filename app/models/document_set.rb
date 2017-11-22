@@ -13,6 +13,9 @@ class DocumentSet < ActiveRecord::Base
   
   validates :title, presence: true, length: { minimum: 3, maximum: 255 }
 
+  scope :order_by_recent_activity, -> { joins(works: :deeds).order('deeds.created_at DESC') }
+
+
   def show_to?(user)
     self.is_public? || (user && user.collaborator?(self)) || self.collection.show_to?(user)
   end
