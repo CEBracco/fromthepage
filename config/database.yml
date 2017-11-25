@@ -15,7 +15,7 @@ default: &default
   pool: 5
   username: root
   password:
-  url: <%= ENV['DATABASE_URL'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
   strict: false
   variables:
     sql_mode: TRADITIONAL
@@ -53,5 +53,3 @@ test:
 production:
   <<: *default
   database: diary_production
-  username: root
-  password:
