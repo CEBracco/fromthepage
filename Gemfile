@@ -75,3 +75,7 @@ gem 'devise_masquerade'
 
 #friendly routes
 gem 'friendly_id'
+
+gem 'tzinfo-data'
+
+gem 'ahoy_matey'
